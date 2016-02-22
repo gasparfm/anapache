@@ -1,0 +1,56 @@
+#include "gcommon.hpp"
+#include "gstr.hpp"
+#include "cfileutils.h"
+#include <iostream>
+
+namespace GCommon
+{
+  std::map<std::string, std::string> GlobalSettings::storage;
+  const std::list<std::string> stdConfigPaths =
+  {
+    ":sname.:cfgext",
+    "/etc/:sname/:sname.:cfgext",
+    "/etc/:sname.:cfgext",
+    "/etc/:sname/config.:cfgext"
+  };
+
+
+  namespace
+  {
+    bool _findFile(std::string &file, const std::list<std::string>& paths, const std::map<std::string, std::string>& replacements)
+    {
+      for (auto p : paths)
+	{
+	  p = replace(p, replacements);
+	  if (file_exists(p.c_str())==1)
+	    {
+	      file = p;
+	      return true;
+	    }
+	}
+    }
+  };
+
+  bool findFile(std::string &file, const std::list<std::string>& paths, const std::map<std::string, std::string>& replacements)
+  {
+    return _findFile(file, paths, replacements);
+    /* std::vector<std::string> paths = {"/etc/sermon/config.json", "/etc/sermon.json", "./sermon.json", "./config.json", "./config/sermon.json"}; */
+    return false;
+  }
+
+  bool findConfigFile(std::string &file, const std::string& ext, const std::list<std::string>& paths)
+  {}
+
+  void GlobalSettings::basics(std::string programName, std::string programShortName, std::string programFile, std::string programVersion)
+  {}
+
+  void GlobalSettings::set(std::string key, std::string value)
+  {}
+
+  std::string GlobalSettings::get(std::string key)
+  {}
+
+  const std::map<std::string, std::string> &GlobalSettings::all()
+  {}
+
+};
